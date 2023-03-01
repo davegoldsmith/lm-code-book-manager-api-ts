@@ -133,3 +133,45 @@ describe("POST /api/v1/books endpoint", () => {
 		expect(res.statusCode).toEqual(400);
 	});
 });
+
+describe("DELETE /api/v1/books/{bookId} endpoint", () => {
+	test("status code successfully 200 for a book that is found and deleted", async () => {
+		// Arrange
+		jest
+			.spyOn(bookService, "deleteBook")
+			.mockResolvedValue(1);
+
+		// Act
+		const res = await request(app).delete("/api/v1/books/1");
+
+		// Assert
+		expect(res.statusCode).toEqual(200);
+	});
+
+	test("status code successfully 404 for a book that is not found", async () => {
+		// Arrange
+
+		jest
+			.spyOn(bookService, "deleteBook")
+			// server returns 0 when it can't find a book with the given id
+			.mockResolvedValue(0);
+		// Act
+		const res = await request(app).delete("/api/v1/books/99");
+
+		// Assert
+		expect(res.statusCode).toEqual(404);
+	});
+
+	test("controller successfully returns delete message", async () => {
+		// Arrange
+		jest
+			.spyOn(bookService, "deleteBook")
+			.mockResolvedValue(1);
+
+		// Act
+		const res = await request(app).delete("/api/v1/books/2");
+
+		// Assert
+		expect(res.body).toEqual("Book with id = 2 successfully deleted");
+	});
+});
