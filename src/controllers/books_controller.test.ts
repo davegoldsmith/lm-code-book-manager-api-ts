@@ -85,7 +85,7 @@ describe("GET /api/v1/books/{bookId} endpoint", () => {
 			// this is a weird looking type assertion!
 			// it's necessary because TS knows we can't actually return unknown here
 			// BUT we want to check that in the event a book is missing we return a 404
-			.mockResolvedValue(undefined as unknown as Book);
+			.mockResolvedValue(null as unknown as Book);
 		// Act
 		const res = await request(app).get("/api/v1/books/77");
 
